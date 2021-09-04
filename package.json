@@ -1,0 +1,15 @@
+{
+  "name": "shopify-blank-email-templates",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:kayluhb/shopify-blank-email-templates.git",
+  "author": "Caleb Brown <kayluhb@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "liquidjs": "^9.25.1"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
