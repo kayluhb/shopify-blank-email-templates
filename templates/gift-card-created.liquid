@@ -1,0 +1,37 @@
+{% capture email_title %}
+    Your gift card
+{% endcapture %}
+{% capture email_body %}
+  {% if gift_card.expires_on %}
+    Your {{ gift_card.balance | money_without_trailing_zeros }} gift card for {{ shop.name }} is active. Keep this email or write down your gift card number. This gift card expires on {{ gift_card.expires_on }}.
+  {% else %}
+    Your {{ gift_card.balance | money_without_trailing_zeros }} gift card for {{ shop.name }} is active. Keep this email or write down your gift card number.
+  {% endif %}
+{% endcapture %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ email_title }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+      .button { background: {{ shop.email_accent_color }}; }
+      a, a:hover, a:active, a:visited { color: {{ shop.email_accent_color }}; }
+    </style>
+  </head>
+  <body>
+    <h1>{{ email_title }}</h1>
+    <img src="{{ 'gift-card/card.jpg' | shopify_asset_url }}" alt="Gift card image" width="240" height="160">
+    <p>{{ email_body }}</p>
+    <a href="{{ gift_card.url }}">View gift card</a>
+    <br />
+
+    {% if gift_card.pass_url %}
+      <a href="{{ gift_card.pass_url }}">
+        <img src="{{ 'gift-card/add-to-apple-wallet.png' | shopify_asset_url }}" alt="Add to Apple Wallet" width="120" height="40">
+      </a>
+    {% endif %}
+
+    <p>If you have any questions, reply to this email or contact us at <a href="mailto:{{ shop.email }}">{{ shop.email }}</a></p>
+  </body>
+</html>

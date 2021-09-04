@@ -1,0 +1,239 @@
+{% capture email_title %}Your order was updated {% endcapture %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ email_title }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+      .button { background: {{ shop.email_accent_color }}; }
+      a, a:hover, a:active, a:visited { color: {{ shop.email_accent_color }}; }
+    </style>
+  </head>
+  <body>
+    {%- if shop.email_logo_url %}
+      <img src="{{ shop.email_logo_url }}" alt="{{ shop.name }}" width="{{ shop.email_logo_width }}">
+    {%- else %}
+      <h1>
+        <a href="{{ shop.url }}">{{ shop.name }}</a>
+      </h1>
+    {%- endif %}
+
+    <h2>Order {{ order_name }}</h2>
+    <h2>{{ email_title }}</h2>
+    <p>{{ email_body }}</p>
+
+    {% if custom_message != blank %}
+      <p>{{ custom_message }}</p>
+    {% endif %}
+
+    {% if order_status_url %}
+      <a href="{{ order_status_url }}">View your order</a>
+      {% if shop.url %}
+        or <a href="{{ shop.url }}">Visit our store</a>
+      {% endif %}
+    {% else %}
+      {% if shop.url %}
+        <a href="{{ shop.url }}">Visit our store</a>
+      {% endif %}
+    {% endif %}
+
+    <h3>Updated order</h3>
+
+    {% for line in subtotal_line_items %}
+      {% if line.image %}
+        <img src="{{ line | img_url: 'compact_cropped' }}" align="left" width="60" height="60" />
+      {% endif %}
+
+      {% if line.product.title %}
+        {% assign line_title = line.product.title %}
+      {% else %}
+        {% assign line_title = line.title %}
+      {% endif %}
+
+      {% if line.quantity < line.quantity %}
+        {% capture line_display %}
+          {{ line.quantity }} of {{ line.quantity }}
+        {% endcapture %}
+      {% else %}
+        {% capture line_display %}
+          {{ line.quantity }}
+        {% endcapture %}
+      {% endif %}
+
+      {{ line_title }} × {{ line_display }}
+
+      {% if line.variant.title != 'Default Title' %}
+        {{ line.variant.title }}
+      {% endif %}
+
+      {% if line.selling_plan_allocation %}
+        {{ line.selling_plan_allocation.selling_plan.name }}
+      {% endif %}
+
+      {% if line.discount_allocations %}
+        {% for discount_allocation in line.discount_allocations %}
+          {% if discount_allocation.discount_application.target_selection != 'all' %}
+            <img src="{{ 'notifications/discounttag.png' | shopify_asset_url }}" width="18" height="18" />
+            {{ discount_allocation.discount_application.title | upcase }}
+            (-{{ discount_allocation.amount | money }})
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      {% if line.original_line_price != line.final_line_price %}
+        <del>{{ line.original_line_price | money }}</del>
+      {% endif %}
+      <p>
+        {% if line.final_line_price > 0 %}
+          {{ line.final_line_price | money }}
+        {% else %}
+          Free
+        {% endif %}
+      </p>
+    {% endfor %}
+
+    {% for discount_application in discount_applications %}
+      {% if discount_application.target_selection == 'all' %}
+        {% capture discount_title %}
+          {% if discount_application.title %}
+            {{ discount_application.title | upcase }}
+          {% else %}
+            Discount
+          {% endif %}
+        {% endcapture %}
+
+        <p>
+          Discount
+          <img src="{{ 'notifications/discounttag.png' | shopify_asset_url }}" width="18" height="18" />
+          {{ discount_title }}
+        </p>
+        <strong>-{{ discount_application.total_allocated_amount | money }}</strong>
+      {% endif %}
+    {% endfor %}
+
+    <p>
+      Subtotal
+    </p>
+    <strong>{{ subtotal_price | money }}</strong>
+
+    {% if delivery_method == 'pick-up' %}
+      <p>
+        Pickup
+      </p>
+      <strong>{{ shipping_price | money }}</strong>
+    {% else %}
+      <p>
+        Shipping
+      </p>
+      <strong>{{ shipping_price | money }}</strong>
+    {% endif %}
+
+    {% if current_total_duties %}
+      <p>
+        Duties
+      </p>
+      <strong>{{ current_total_duties | money }}</strong>
+    {% endif %}
+
+    <p>
+      Taxes
+    </p>
+    <strong>{{ tax_price | money }}</strong>
+
+    {% if total_tip and total_tip > 0 %}
+      <p>
+        Tip
+      </p>
+      <strong>{{ total_tip | money }}</strong>
+    {% endif %}
+
+    <p>
+      Total
+    </p>
+    <strong>{{ total_price | money_with_currency }}</strong>
+
+    {% if total_discounts > 0 %}
+      <p>
+        You saved {{ total_discounts | money }}
+      </p>
+    {% endif %}
+
+    {% assign transaction_size = 0 %}
+    {% assign transaction_amount = 0 %}
+    {% for transaction in transactions %}
+      {% unless transaction.kind == "capture" or transaction.kind == "void" %}
+        {% assign transaction_size = transaction_size | plus: 1 %}
+        {% assign transaction_amount = transaction_amount | plus: transaction.amount %}
+      {% endunless %}
+    {% endfor %}
+
+    {% if transaction_size > 1 or transaction_amount < total_price %}
+      {% for transaction in transactions %}
+        {% if transaction.status == "success" and transaction.kind == "authorization" or transaction.kind == "sale" %}
+          {% if transaction.payment_details.credit_card_company %}
+            {% capture transaction_name %}{{ transaction.payment_details.credit_card_company }} (ending in {{ transaction.payment_details.credit_card_last_four_digits }}){% endcapture %}
+          {% else %}
+            {% capture transaction_name %}{{ transaction.gateway_display_name }}{% endcapture %}
+          {% endif %}
+
+          <p>
+            {{ transaction_name }}
+          </p>
+          <strong>{{ transaction.amount | money }}</strong>
+        {% endif %}
+
+        {% if transaction.kind == 'refund' %}
+          {% if transaction.payment_details.credit_card_company %}
+            {% assign refund_method_title = transaction.payment_details.credit_card_company %}
+          {% else %}
+            {% assign refund_method_title = transaction.gateway %}
+          {% endif %}
+
+          <p>
+            Refund {{ refund_method_title | capitalize }}
+          </p>
+          <strong>- {{ transaction.amount | money }}</strong>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    <h3>Customer information</h3>
+    {% if requires_shipping and shipping_address %}
+      <h4>Shipping address</h4>
+      {{ shipping_address | format_address }}
+    {% endif %}
+
+    {% if billing_address %}
+      <h4>Billing address</h4>
+      {{ billing_address | format_address }}
+    {% endif %}
+
+    {% if requires_shipping and shipping_address %}
+      <h4>Shipping method</h4>
+      <p>{{ shipping_method.title }}</p>
+    {% endif %}
+
+    {% assign transaction_count = transactions | size %}
+    {% if transaction_count > 0 %}
+      <h4>Payment method</h4>
+      {% for transaction in transactions %}
+        {% if transaction.status == "success" or transaction.status == "pending" %}
+          {% if transaction.kind == "authorization" or transaction.kind == "sale" %}
+            <p>
+              {% if transaction.payment_details.credit_card_company %}
+                {% capture credit_card_url %}notifications/{{ transaction.payment_details.credit_card_company | downcase | replace: " ", "_" }}.png{% endcapture %}
+                <img src="{{ credit_card_url | shopify_asset_url }}" height="24">
+                Payment method — <strong>{{ transaction.amount | money }}</strong>
+              {% else %}
+                {{ transaction.gateway_display_name }} — <strong>{{ transaction.amount | money }}</strong>
+              {% endif %}
+            </p>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    <p>If you have any questions, reply to this email or contact us at <a href="mailto:{{ shop.email }}">{{ shop.email }}</a></p>
+  </body>
+</html>

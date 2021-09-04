@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ email_title }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" type="text/css" href="/assets/notifications/styles.css">
+    <style>
+      .button { background: {{ shop.email_accent_color }}; }
+      a, a:hover, a:active, a:visited { color: {{ shop.email_accent_color }}; }
+    </style>
+  </head>
+  <body>
+    {%- if shop.email_logo_url %}
+      <img src="{{ shop.email_logo_url }}" alt="{{ shop.name }}" width="{{ shop.email_logo_width }}">
+    {%- else %}
+      <h1>
+        <a href="{{ shop.url }}">{{ shop.name }}</a>
+      </h1>
+    {%- endif %}
+
+    <h2>Order {{ order.name }}</h2>
+
+    <h2>Your return label is ready</h2>
+    <a href="{{ return_label.public_file_url }}">Print return label</a>
+
+    {% if shop.url %}
+      or <a href="{{ shop.url }}">Visit our store</a>
+    {% endif %}
+
+    <h3>Instructions</h3>
+    <ol>
+      <li>Pack the items you're returning.</li>
+      <li>Print your return label and attach it to the package. Cover any existing shipping labels.</li>
+      <li>Give the package to the carrier identified on the label.</li>
+    </ol>
+    <p>If you have any questions, reply to this email or contact us at <a href="mailto:{{ shop.email }}">{{ shop.email }}</a></p>
+  </body>
+</html>

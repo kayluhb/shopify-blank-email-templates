@@ -1,0 +1,39 @@
+{% capture email_title %}Activate your account{% endcapture %}
+{% capture email_body %}Hi {{ customer.first_name }}, you've created a new customer account at <a href="{{ shop.url }}">{{shop.name}}</a>. All you have to do is activate it.{% endcapture %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ email_title }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+      .button { background: {{ shop.email_accent_color }}; }
+      a, a:hover, a:active, a:visited { color: {{ shop.email_accent_color }}; }
+    </style>
+  </head>
+  <body>
+    {%- if shop.email_logo_url %}
+      <img src="{{ shop.email_logo_url }}" alt="{{ shop.name }}" width="{{ shop.email_logo_width }}">
+    {%- else %}
+      <h1>
+        <a href="{{ shop.url }}">{{ shop.name }}</a>
+      </h1>
+    {%- endif %}
+
+    <h2>{{ email_title }}</h2>
+
+    {% if custom_message != blank %}
+      <p>{{ custom_message }}</p>
+    {% else %}
+      <p>{{ email_body }}</p>
+    {% endif %}
+
+    <a href="{{ customer.account_activation_url }}">Activate your account</a>
+
+    {% if shop.url %}
+      or <a href="{{ shop.url }}">Visit our store</a>
+    {% endif %}
+
+    <p>If you have any questions, reply to this email or contact us at <a href="mailto:{{ shop.email }}">{{ shop.email }}</a></p>
+  </body>
+</html>
