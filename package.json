@@ -6,7 +6,7 @@
   "author": "Caleb Brown <kayluhb@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "liquidjs": "^9.25.1"
   },
   "scripts": {
