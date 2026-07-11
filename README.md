@@ -4,7 +4,7 @@ A repository to host blank Shopify email templates.
 
 Shopify's default email templates have all the necessary Liquid, but aren't indented, are inconsistent across templates, and have several bugs. This repository is an effort to scrub them of all extra markup and indent everything consistently so it's a better starting point for creating custom emails.
 
-This repo covers all **42 customer notification** templates available in Shopify admin under **Settings → Notifications → Customer notifications**, plus the **Fulfillment request** template for third-party fulfillment services. Cross-referenced with [Shopify Help Center: Store notifications](https://help.shopify.com/en/manual/orders/notifications) and the [Notifications variables reference](https://help.shopify.com/en/manual/orders/notifications/email-variables).
+This repo covers all **41 customer notification** templates available in Shopify admin under **Settings → Notifications → Customer notifications**, plus the **Fulfillment request** template for third-party fulfillment services. Cross-referenced with [Shopify Help Center: Store notifications](https://help.shopify.com/en/manual/orders/notifications) and the [Notifications variables reference](https://help.shopify.com/en/manual/orders/notifications/email-variables).
 
 ## Local preview
 
@@ -87,7 +87,6 @@ Open [http://localhost:5050](http://localhost:5050) for links to each template.
 
 - [Customer account invite](templates/customer-account-invite.liquid) — Sent with account activation instructions.
 - [Customer account welcome](templates/customer-account-welcome.liquid) — Sent when account activation is completed.
-- [Customer account password reset](templates/customer-account-password-reset.liquid) — Sent when a customer requests a password reset.
 - [Customer payment method update request](templates/customer-payment-method-update-request.liquid) — Shopify admin: **Payment method update request**.
 - [Payment method restore request](templates/payment-method-restore-request.liquid) — Sent when a customer needs to verify their payment information.
 - [Contact customer](templates/contact-customer.liquid) — Sent when you contact a customer from the admin.
@@ -108,6 +107,7 @@ These are sent to third-party fulfillment providers, not customers.
 
 These are managed separately in Shopify admin and are not part of this repo:
 
+- **Legacy customer account password reset** — Only applies to [legacy customer accounts](https://help.shopify.com/en/manual/customers/customer-accounts/legacy-customer-accounts). [New customer accounts](https://help.shopify.com/en/manual/customers/customer-accounts/new-customer-accounts) use passwordless sign-in, so this notification is no longer used.
 - **Staff notifications** — e.g. New order, Store order summary
 - **SMS notifications** — Order confirmation text messages
 - **Subscription notifications** — Available when the [Shopify Subscriptions](https://help.shopify.com/en/manual/products/purchase-options/subscriptions) app is installed

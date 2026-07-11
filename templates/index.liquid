@@ -71,6 +71,33 @@
       color: #8c9196;
       margin-bottom: 8px;
     }
+    .search {
+      width: 100%;
+      padding: 12px 14px;
+      margin-bottom: 24px;
+      border: 1px solid #e1e3e5;
+      border-radius: 4px;
+      font-size: 15px;
+      color: #202223;
+      background: #fff;
+    }
+    .search:focus {
+      outline: none;
+      border-color: #008060;
+      box-shadow: 0 0 0 1px #008060;
+    }
+    .no-results {
+      display: none;
+      padding: 24px;
+      text-align: center;
+      color: #616161;
+      background: #fff;
+      border: 1px solid #e1e3e5;
+      border-radius: 4px;
+      font-size: 15px;
+    }
+    .no-results.is-visible { display: block; }
+    .is-hidden { display: none !important; }
   </style>
 </head>
 <body>
@@ -78,78 +105,112 @@
     <p class="tagline">Local preview</p>
     <h1>Shopify Blank Email Templates</h1>
     <p class="intro">Scrubbed starting points for Shopify notification emails. Copy into Shopify Admin → Settings → Notifications.</p>
-    <p class="count">43 templates</p>
+    <p class="count" id="template-count">42 templates</p>
+    <input type="search" class="search" id="template-search" placeholder="Search templates…" aria-label="Search templates">
+
+    <p class="no-results" id="no-results">No templates match your search.</p>
 
     <h2>Orders</h2>
     <ul>
-      <li><a href="/order-confirmation">Order confirmation</a></li>
-      <li><a href="/order-edited">Order edited</a></li>
-      <li><a href="/order-invoice">Order invoice</a></li>
-      <li><a href="/order-canceled">Order canceled</a></li>
-      <li><a href="/order-refund">Order refund</a></li>
-      <li><a href="/order-payment-receipt">Order payment receipt</a></li>
-      <li><a href="/draft-order-invoice">Draft order invoice</a></li>
-      <li><a href="/abandoned-checkout">Abandoned checkout</a></li>
-      <li><a href="/payment-error">Payment error</a></li>
-      <li><a href="/pending-payment-success">Pending payment success</a></li>
-      <li><a href="/pending-payment-error">Pending payment error</a></li>
-      <li><a href="/payment-reminder">Payment reminder</a></li>
-      <li><a href="/gift-card-created">Gift card created</a></li>
-      <li><a href="/gift-card-receipt">Gift card receipt</a></li>
+      <li data-search="order confirmation order-confirmation"><a href="/order-confirmation">Order confirmation</a></li>
+      <li data-search="order edited order-edited"><a href="/order-edited">Order edited</a></li>
+      <li data-search="order invoice order-invoice"><a href="/order-invoice">Order invoice</a></li>
+      <li data-search="order canceled order-canceled cancelled"><a href="/order-canceled">Order canceled</a></li>
+      <li data-search="order refund order-refund"><a href="/order-refund">Order refund</a></li>
+      <li data-search="order payment receipt order-payment-receipt"><a href="/order-payment-receipt">Order payment receipt</a></li>
+      <li data-search="draft order invoice draft-order-invoice"><a href="/draft-order-invoice">Draft order invoice</a></li>
+      <li data-search="abandoned checkout abandoned-checkout"><a href="/abandoned-checkout">Abandoned checkout</a></li>
+      <li data-search="payment error payment-error"><a href="/payment-error">Payment error</a></li>
+      <li data-search="pending payment success pending-payment-success"><a href="/pending-payment-success">Pending payment success</a></li>
+      <li data-search="pending payment error pending-payment-error"><a href="/pending-payment-error">Pending payment error</a></li>
+      <li data-search="payment reminder payment-reminder"><a href="/payment-reminder">Payment reminder</a></li>
+      <li data-search="gift card created gift-card-created new gift card"><a href="/gift-card-created">Gift card created</a></li>
+      <li data-search="gift card receipt gift-card-receipt"><a href="/gift-card-receipt">Gift card receipt</a></li>
     </ul>
 
     <h2>Shipping &amp; delivery</h2>
     <ul>
-      <li><a href="/shipping-confirmation">Shipping confirmation</a></li>
-      <li><a href="/shipping-update">Shipping update</a></li>
-      <li><a href="/out-for-delivery">Out for delivery</a></li>
-      <li><a href="/delivered">Delivered</a></li>
-      <li><a href="/ready-for-pickup">Ready for pickup</a></li>
-      <li><a href="/picked-up">Picked up</a></li>
-      <li><a href="/order-out-for-local-delivery">Order out for local delivery</a></li>
-      <li><a href="/order-locally-delivered">Order locally delivered</a></li>
-      <li><a href="/order-missed-local-delivery">Order missed local delivery</a></li>
+      <li data-search="shipping confirmation shipping-confirmation"><a href="/shipping-confirmation">Shipping confirmation</a></li>
+      <li data-search="shipping update shipping-update"><a href="/shipping-update">Shipping update</a></li>
+      <li data-search="out for delivery out-for-delivery"><a href="/out-for-delivery">Out for delivery</a></li>
+      <li data-search="delivered"><a href="/delivered">Delivered</a></li>
+      <li data-search="ready for pickup ready-for-pickup"><a href="/ready-for-pickup">Ready for pickup</a></li>
+      <li data-search="picked up picked-up"><a href="/picked-up">Picked up</a></li>
+      <li data-search="order out for local delivery order-out-for-local-delivery local"><a href="/order-out-for-local-delivery">Order out for local delivery</a></li>
+      <li data-search="order locally delivered order-locally-delivered local"><a href="/order-locally-delivered">Order locally delivered</a></li>
+      <li data-search="order missed local delivery order-missed-local-delivery local"><a href="/order-missed-local-delivery">Order missed local delivery</a></li>
     </ul>
 
     <h2>Returns</h2>
     <ul>
-      <li><a href="/return-created">Return created</a></li>
-      <li><a href="/order-level-return-label-created">Order-level return label created</a></li>
-      <li><a href="/return-request-received">Return request received</a></li>
-      <li><a href="/return-request-approved">Return request approved</a></li>
-      <li><a href="/return-request-declined">Return request declined</a></li>
+      <li data-search="return created return-created"><a href="/return-created">Return created</a></li>
+      <li data-search="order level return label order-level-return-label-created"><a href="/order-level-return-label-created">Order-level return label created</a></li>
+      <li data-search="return request received return-request-received"><a href="/return-request-received">Return request received</a></li>
+      <li data-search="return request approved return-request-approved"><a href="/return-request-approved">Return request approved</a></li>
+      <li data-search="return request declined return-request-declined"><a href="/return-request-declined">Return request declined</a></li>
     </ul>
 
     <h2>POS</h2>
     <ul>
-      <li><a href="/email-cart-from-pos">POS abandoned checkout</a></li>
-      <li><a href="/pos-email-to-customer">POS email to customer</a></li>
-      <li><a href="/pos-and-mobile-receipt">POS &amp; mobile receipt</a></li>
-      <li><a href="/pos-exchange-receipt">POS exchange receipt</a></li>
-      <li><a href="/pos-exchange-v2-receipt">POS exchange V2 receipt</a></li>
+      <li data-search="pos abandoned checkout email cart email-cart-from-pos"><a href="/email-cart-from-pos">POS abandoned checkout</a></li>
+      <li data-search="pos email to customer pos-email-to-customer"><a href="/pos-email-to-customer">POS email to customer</a></li>
+      <li data-search="pos mobile receipt pos-and-mobile-receipt"><a href="/pos-and-mobile-receipt">POS &amp; mobile receipt</a></li>
+      <li data-search="pos exchange receipt pos-exchange-receipt"><a href="/pos-exchange-receipt">POS exchange receipt</a></li>
+      <li data-search="pos exchange v2 receipt pos-exchange-v2-receipt"><a href="/pos-exchange-v2-receipt">POS exchange V2 receipt</a></li>
     </ul>
 
     <h2>Customer account &amp; marketing</h2>
     <ul>
-      <li><a href="/customer-account-invite">Customer account invite</a></li>
-      <li><a href="/customer-account-welcome">Customer account welcome</a></li>
-      <li><a href="/customer-account-password-reset">Password reset</a></li>
-      <li><a href="/customer-payment-method-update-request">Payment method update</a></li>
-      <li><a href="/payment-method-restore-request">Payment method restore</a></li>
-      <li><a href="/contact-customer">Contact customer</a></li>
-      <li><a href="/confirmation-email">Email marketing confirmation</a></li>
+      <li data-search="customer account invite customer-account-invite"><a href="/customer-account-invite">Customer account invite</a></li>
+      <li data-search="customer account welcome customer-account-welcome"><a href="/customer-account-welcome">Customer account welcome</a></li>
+      <li data-search="payment method update customer-payment-method-update-request"><a href="/customer-payment-method-update-request">Payment method update</a></li>
+      <li data-search="payment method restore payment-method-restore-request"><a href="/payment-method-restore-request">Payment method restore</a></li>
+      <li data-search="contact customer contact-customer"><a href="/contact-customer">Contact customer</a></li>
+      <li data-search="email marketing confirmation confirmation-email"><a href="/confirmation-email">Email marketing confirmation</a></li>
     </ul>
 
     <h2>B2B</h2>
     <ul>
-      <li><a href="/b2b-access-email">B2B access email</a></li>
-      <li><a href="/b2b-location-update-payment-method">B2B location update payment method</a></li>
+      <li data-search="b2b access email b2b-access-email"><a href="/b2b-access-email">B2B access email</a></li>
+      <li data-search="b2b location update payment method b2b-location-update-payment-method"><a href="/b2b-location-update-payment-method">B2B location update payment method</a></li>
     </ul>
 
     <h2>Fulfillment service</h2>
     <ul>
-      <li><a href="/fulfillment-request">Fulfillment request</a></li>
+      <li data-search="fulfillment request fulfillment-request"><a href="/fulfillment-request">Fulfillment request</a></li>
     </ul>
   </div>
+  <script>
+    (function () {
+      var total = 42;
+      var search = document.getElementById('template-search');
+      var count = document.getElementById('template-count');
+      var noResults = document.getElementById('no-results');
+      var items = document.querySelectorAll('[data-search]');
+
+      function filterTemplates() {
+        var query = search.value.trim().toLowerCase();
+        var visible = 0;
+
+        items.forEach(function (item) {
+          var match = !query || item.dataset.search.indexOf(query) !== -1;
+          item.classList.toggle('is-hidden', !match);
+          if (match) visible++;
+        });
+
+        document.querySelectorAll('h2').forEach(function (heading) {
+          var list = heading.nextElementSibling;
+          if (!list) return;
+          var hasVisible = list.querySelector('li:not(.is-hidden)');
+          heading.classList.toggle('is-hidden', !hasVisible);
+        });
+
+        noResults.classList.toggle('is-visible', query && visible === 0);
+        count.textContent = query ? visible + ' of ' + total + ' templates' : total + ' templates';
+      }
+
+      search.addEventListener('input', filterTemplates);
+    })();
+  </script>
 </body>
 </html>

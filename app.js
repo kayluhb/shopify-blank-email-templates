@@ -1,162 +1,88 @@
 const express = require('express')
+const path = require('path')
 const { Liquid } = require('liquidjs')
+const { buildReviewShell } = require('./review-shell')
+const { templates, templateIds } = require('./routes')
 
 const app = express()
 const engine = new Liquid({
-  root: __dirname, // for layouts and partials
-  extname: '.liquid'
+  root: __dirname,
+  extname: '.liquid',
 })
 
-app.engine('liquid', engine.express()) // register liquid engine
-app.set('views', ['./templates']) // specify the views directory
-app.set('view engine', 'liquid') // set to default
+engine.registerFilter('shopify_asset_url', (assetPath) => `/assets/${assetPath}`)
+engine.registerFilter('money_without_trailing_zeros', (value) => value)
+engine.registerFilter('money_with_currency', (value) => value)
+engine.registerFilter('format_code', (value) => value)
+
+app.use('/assets', express.static(path.join(__dirname, 'assets')))
+app.engine('liquid', engine.express())
+app.set('views', ['./templates'])
+app.set('view engine', 'liquid')
 
 const customer = {
   account_activation_url: 'https://shopify.com',
   first_name: 'Jane',
-  reset_password_url: 'https://shopify.com',
   subscribe_url: 'https://shopify.com',
-};
+}
 const shop = {
   email: 'info@shopify.com',
   email_accent_color: 'blue',
-  // email_logo_url: '',
-  // email_logo_width: '',
   name: 'My Shop',
   url: 'https://shopify.com',
 }
-app
-  .get('/', function (req, res) {
-    res.render('index', { shop });
+const giftCard = {
+  balance: '$50',
+  initial_value: '$50.00 USD',
+  code: 'ABCD EFGH IJKL MNOP',
+  url: 'https://shopify.com/gift_cards/example',
+  pass_url: 'https://shopify.com/gift_cards/example/pass',
+  expires_on: '2027-12-31',
+  message: 'Happy birthday! Hope you find something you love.',
+  send_on: '2026-07-15',
+  recipient: {
+    name: 'Alex Recipient',
+    email: 'alex@example.com',
+    nickname: 'Alex',
+  },
+}
+
+const customerTemplates = new Set([
+  'confirmation-email',
+  'customer-account-invite',
+  'order-confirmation',
+  'order-missed-local-delivery',
+])
+
+const giftCardTemplates = new Set(['gift-card-created', 'gift-card-receipt'])
+
+function getPreviewContext(id) {
+  const context = { shop }
+  if (customerTemplates.has(id)) context.customer = customer
+  if (giftCardTemplates.has(id)) context.gift_card = giftCard
+  return context
+}
+
+app.get('/', (req, res) => {
+  res.render('index', { shop })
+})
+
+app.get('/preview/:id', (req, res, next) => {
+  const { id } = req.params
+  if (!templateIds.includes(id)) return next()
+  res.render(id, getPreviewContext(id))
+})
+
+app.get('/:id', (req, res, next) => {
+  const { id } = req.params
+  if (!templateIds.includes(id)) return next()
+  const active = templates.find((t) => t.id === id)
+  const html = buildReviewShell({
+    templates,
+    activeId: id,
+    title: `${active?.label || id} · Shopify Blank Email Templates`,
   })
-  .get('/abandoned-checkout', function (req, res) {
-    res.render('abandoned-checkout', { shop });
-  })
-  .get('/b2b-access-email', function (req, res) {
-    res.render('b2b-access-email', { shop });
-  })
-  .get('/b2b-location-update-payment-method', function (req, res) {
-    res.render('b2b-location-update-payment-method', { shop });
-  })
-  .get('/confirmation-email', function (req, res) {
-    res.render('confirmation-email', { customer, shop });
-  })
-  .get('/contact-customer', function (req, res) {
-    res.render('contact-customer', { shop });
-  })
-  .get('/customer-account-invite', function (req, res) {
-    res.render('customer-account-invite', { customer, shop });
-  })
-  .get('/customer-account-password-reset', function (req, res) {
-    res.render('customer-account-password-reset', { customer, shop });
-  })
-  .get('/customer-account-welcome', function (req, res) {
-    res.render('customer-account-welcome', { shop });
-  })
-  .get('/customer-payment-method-update-request', function (req, res) {
-    res.render('customer-payment-method-update-request', { shop });
-  })
-  .get('/delivered', function (req, res) {
-    res.render('delivered', { shop });
-  })
-  .get('/draft-order-invoice', function (req, res) {
-    res.render('draft-order-invoice', { shop });
-  })
-  .get('/email-cart-from-pos', function (req, res) {
-    res.render('email-cart-from-pos', { shop });
-  })
-  .get('/fulfillment-request', function (req, res) {
-    res.render('fulfillment-request', { shop });
-  })
-  .get('/gift-card-created', function (req, res) {
-    res.render('gift-card-created', { shop });
-  })
-  .get('/gift-card-receipt', function (req, res) {
-    res.render('gift-card-receipt', { shop });
-  })
-  .get('/order-canceled', function (req, res) {
-    res.render('order-canceled', { shop });
-  })
-  .get('/order-confirmation', function (req, res) {
-    res.render('order-confirmation', { customer, shop });
-  })
-  .get('/order-edited', function (req, res) {
-    res.render('order-edited', { shop });
-  })
-  .get('/order-invoice', function (req, res) {
-    res.render('order-invoice', { shop });
-  })
-  .get('/order-level-return-label-created', function (req, res) {
-    res.render('order-level-return-label-created', { shop });
-  })
-  .get('/order-locally-delivered', function (req, res) {
-    res.render('order-locally-delivered', { shop });
-  })
-  .get('/order-missed-local-delivery', function (req, res) {
-    res.render('order-missed-local-delivery', { customer, shop });
-  })
-  .get('/order-out-for-local-delivery', function (req, res) {
-    res.render('order-out-for-local-delivery', { shop });
-  })
-  .get('/order-payment-receipt', function (req, res) {
-    res.render('order-payment-receipt', { shop });
-  })
-  .get('/order-refund', function (req, res) {
-    res.render('order-refund', { shop });
-  })
-  .get('/out-for-delivery', function (req, res) {
-    res.render('out-for-delivery', { shop });
-  })
-  .get('/payment-error', function (req, res) {
-    res.render('payment-error', { shop });
-  })
-  .get('/payment-method-restore-request', function (req, res) {
-    res.render('payment-method-restore-request', { shop });
-  })
-  .get('/payment-reminder', function (req, res) {
-    res.render('payment-reminder', { shop });
-  })
-  .get('/pending-payment-error', function (req, res) {
-    res.render('pending-payment-error', { shop });
-  })
-  .get('/pending-payment-success', function (req, res) {
-    res.render('pending-payment-success', { shop });
-  })
-  .get('/picked-up', function (req, res) {
-    res.render('picked-up', { shop });
-  })
-  .get('/pos-and-mobile-receipt', function (req, res) {
-    res.render('pos-and-mobile-receipt', { shop });
-  })
-  .get('/pos-email-to-customer', function (req, res) {
-    res.render('pos-email-to-customer', { shop });
-  })
-  .get('/pos-exchange-receipt', function (req, res) {
-    res.render('pos-exchange-receipt', { shop });
-  })
-  .get('/pos-exchange-v2-receipt', function (req, res) {
-    res.render('pos-exchange-v2-receipt', { shop });
-  })
-  .get('/ready-for-pickup', function (req, res) {
-    res.render('ready-for-pickup', { shop });
-  })
-  .get('/return-created', function (req, res) {
-    res.render('return-created', { shop });
-  })
-  .get('/return-request-approved', function (req, res) {
-    res.render('return-request-approved', { shop });
-  })
-  .get('/return-request-declined', function (req, res) {
-    res.render('return-request-declined', { shop });
-  })
-  .get('/return-request-received', function (req, res) {
-    res.render('return-request-received', { shop });
-  })
-  .get('/shipping-confirmation', function (req, res) {
-    res.render('shipping-confirmation', { shop });
-  })
-  .get('/shipping-update', function (req, res) {
-    res.render('shipping-update', { shop });
-  });
+  res.type('html').send(html)
+})
 
 module.exports = app
