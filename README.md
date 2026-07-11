@@ -2,89 +2,120 @@
 
 A repository to host blank Shopify email templates.
 
-Shopify's default email templates have all the necessary liquid, but aren't indented, are inconsistent across templates, and have several bugs. This repository is an effort to scrub them of all extra markup and indent everything consistently so it's a better starting point for creating custom emails.
+Shopify's default email templates have all the necessary Liquid, but aren't indented, are inconsistent across templates, and have several bugs. This repository is an effort to scrub them of all extra markup and indent everything consistently so it's a better starting point for creating custom emails.
 
+This repo covers all **42 customer notification** templates available in Shopify admin under **Settings → Notifications → Customer notifications**, plus the **Fulfillment request** template for third-party fulfillment services. Cross-referenced with [Shopify Help Center: Store notifications](https://help.shopify.com/en/manual/orders/notifications) and the [Notifications variables reference](https://help.shopify.com/en/manual/orders/notifications/email-variables).
 
-- [Order confirmation](templates/order-confirmation.liquid)
-Sent automatically to the customer after they place their order.
+## Local preview
 
-- [Order edited](templates/order-edited.liquid)
-Sent to the customer after their order is edited (if you select this option).
+```bash
+yarn install
+node index.js
+```
 
-- [Order edited invoice](templates/order-edited-invoice.liquid)
-Sent to the customer after their order is edited and they owe money (if you select this option).
+Open [http://localhost:5050](http://localhost:5050) for links to each template.
 
-- [Order invoice](templates/order-invoice.liquid)
-Sent to the customer when the order has an outstanding balance.
+## Audit summary
 
-- [Order canceled](templates/order-canceled.liquid)
-Sent automatically to the customer if their order is canceled (if you select this option).
+| Status | Count |
+| --- | --- |
+| Customer notifications | 42 |
+| Fulfillment service notifications | 1 |
+| Removed (deprecated by Shopify) | 1 |
 
-- [Order refund](templates/order-refund.liquid)
-Sent automatically to the customer if their order is refunded (if you select this option).
+### Removed (no longer in Shopify)
 
-- [Draft order invoice](templates/draft-order-invoice.liquid)
-Sent to the customer when a draft order invoice is created. You can edit this email invoice before you send it.
+| Former file | Shopify admin name | Reason |
+| --- | --- | --- |
+| `order-edited-invoice.liquid` | Order edited invoice | Removed by Shopify. Outstanding balances from order edits now use the [Order invoice](#order-invoice) template with [payment terms](https://help.shopify.com/en/manual/orders/notifications/edit-template). |
 
-- [Email cart from POS](templates/email-cart-from-pos.liquid)
-Sent to the customer when you email their cart from POS. Includes a link to buy online.
+### Renamed (to match current Shopify admin names)
 
-- [Abandoned checkout](templates/abandoned-checkout.liquid)
-Sent to the customer if they leave checkout before they buy the items in their cart. Configure options in "checkout settings".
+| Old file | New file | Shopify admin name |
+| --- | --- | --- |
+| `return-instructions.liquid` | `return-created.liquid` | Return created |
+| `return-label-instructions.liquid` | `order-level-return-label-created.liquid` | Order-level return label created |
 
-- [POS and mobile receipt](templates/pos-and-mobile-receipt.liquid)
-Sent to the customer after they complete an in person order and want to be emailed a receipt.
+## Customer notifications
 
-- [POS Exchange Receipt](templates/pos-exchange-receipt.liquid)
-Sent to the customer after they complete an exchange in person and want to be emailed a receipt.
+### Orders
 
-- [Gift card created](templates/gift-card-created.liquid)
-Sent automatically to the customer when you issue or fulfill a gift card.
+- [Order confirmation](templates/order-confirmation.liquid) — Sent automatically after the customer places an order.
+- [Order edited](templates/order-edited.liquid) — Sent after an order is edited (when notification is enabled).
+- [Order invoice](templates/order-invoice.liquid) — Sent when an order has an outstanding balance. Also used when an edited order requires additional payment.
+- [Order canceled](templates/order-canceled.liquid) — Sent when an order is canceled (when notification is enabled).
+- [Order refund](templates/order-refund.liquid) — Sent when an order is refunded (when notification is enabled).
+- [Order payment receipt](templates/order-payment-receipt.liquid) — Sent after you charge a customer's saved payment method.
+- [Draft order invoice](templates/draft-order-invoice.liquid) — Sent when a draft order invoice is created.
+- [Abandoned checkout](templates/abandoned-checkout.liquid) — Sent when a customer abandons checkout (when automation is enabled).
+- [Payment error](templates/payment-error.liquid) — Sent when a payment cannot be processed at checkout.
+- [Pending payment success](templates/pending-payment-success.liquid) — Sent when a pending payment is successfully processed after checkout.
+- [Pending payment error](templates/pending-payment-error.liquid) — Sent when a pending payment cannot be processed after checkout.
+- [Payment reminder](templates/payment-reminder.liquid) — Sent on or after the due date for unpaid orders.
+- [Gift card created](templates/gift-card-created.liquid) — Sent when a gift card is issued or fulfilled.
+- [Gift card receipt](templates/gift-card-receipt.liquid) — Sent when a customer adds a recipient to their gift card.
 
-- [Payment error](templates/payment-error.liquid)
-Sent automatically to the customer if their payment can’t be processed.
+### Shipping and delivery
 
-- [Fulfillment request](templates/fulfillment-request.liquid)
-Sent automatically to a third-party fulfillment service provider when order items are fulfilled.
+- [Shipping confirmation](templates/shipping-confirmation.liquid) — Sent when an order is fulfilled (when notification is enabled).
+- [Shipping update](templates/shipping-update.liquid) — Sent when a fulfilled order's tracking number is updated.
+- [Out for delivery](templates/out-for-delivery.liquid) — Sent when fulfillment status changes to out for delivery.
+- [Delivered](templates/delivered.liquid) — Sent when fulfillment status changes to delivered.
+- [Ready for pickup](templates/ready-for-pickup.liquid) — Sent when an order is ready for local pickup.
+- [Picked up](templates/picked-up.liquid) — Sent when an order is marked as picked up.
+- [Order out for local delivery](templates/order-out-for-local-delivery.liquid) — Sent when a local delivery order is out for delivery.
+- [Order locally delivered](templates/order-locally-delivered.liquid) — Sent when a local delivery order is delivered.
+- [Order missed local delivery](templates/order-missed-local-delivery.liquid) — Sent when a local delivery is missed.
 
-- [Shipping confirmation](templates/shipping-confirmation.liquid)
-Sent automatically to the customer when their order is fulfilled (if you select this option).
+### POS
 
-- [Shipping update](templates/shipping-update.liquid)
-Sent automatically to the customer if their fulfilled order’s tracking number is updated (if you select this option).
+- [Email cart from POS](templates/email-cart-from-pos.liquid) — Shopify admin: **POS abandoned checkout**. Sent when a POS cart is emailed so the customer can complete checkout online.
+- [POS email to customer](templates/pos-email-to-customer.liquid) — Sent when a customer leaves POS checkout before completing their purchase.
+- [POS and mobile receipt](templates/pos-and-mobile-receipt.liquid) — Sent after an in-person order when the customer requests an emailed receipt.
+- [POS exchange receipt](templates/pos-exchange-receipt.liquid) — Sent after an in-person exchange when the customer requests an emailed receipt.
+- [POS exchange V2 receipt](templates/pos-exchange-v2-receipt.liquid) — Sent after an Exchange V2 in person when the customer requests an emailed receipt.
 
-- [Out for delivery](templates/out-for-delivery.liquid)
-Sent to the customer automatically after orders with tracking information are out for delivery.
+### Returns
 
-- [Delivered](templates/delivered.liquid)
-Sent to the customer automatically after orders with tracking information are delivered.
+- [Return created](templates/return-created.liquid) — Sent when you create a return. Includes return label instructions when applicable.
+- [Order-level return label created](templates/order-level-return-label-created.liquid) — Sent after creating a return label at the order level.
+- [Return request received](templates/return-request-received.liquid) — Sent when a customer requests a return.
+- [Return request approved](templates/return-request-approved.liquid) — Sent when you approve a return request.
+- [Return request declined](templates/return-request-declined.liquid) — Sent when a return request is declined.
 
-- [Ready for pickup](templates/ready-for-pickup.liquid)
-Sent to the customer manually through Point of Sale or admin. Lets the customer know their order is ready to be picked up.
+### Customer account and marketing
 
-- [Picked up](templates/picked-up.liquid)
-Sent to the customer when the order is marked as picked up.
+- [Customer account invite](templates/customer-account-invite.liquid) — Sent with account activation instructions.
+- [Customer account welcome](templates/customer-account-welcome.liquid) — Sent when account activation is completed.
+- [Customer account password reset](templates/customer-account-password-reset.liquid) — Sent when a customer requests a password reset.
+- [Customer payment method update request](templates/customer-payment-method-update-request.liquid) — Shopify admin: **Payment method update request**.
+- [Payment method restore request](templates/payment-method-restore-request.liquid) — Sent when a customer needs to verify their payment information.
+- [Contact customer](templates/contact-customer.liquid) — Sent when you contact a customer from the admin.
+- [Confirmation email](templates/confirmation-email.liquid) — Shopify admin: **Email marketing confirmation**. Sent when a customer signs up for email marketing with double opt-in enabled.
 
-- [Customer account invite](templates/customer-account-invite.liquid)
-Sent to the customer with account activation instructions. You can edit this email before you send it.
+### B2B
 
-- [Customer account welcome](templates/customer-account-welcome.liquid)
-Sent automatically to the customer when they complete their account activation.
+- [B2B access email](templates/b2b-access-email.liquid) — Sent when a customer is invited to place B2B orders.
+- [B2B location update payment method](templates/b2b-location-update-payment-method.liquid) — Sent when a customer requests to update their payment method for a B2B location.
 
-- [Customer account password reset](templates/customer-account-password-reset.liquid)
-Sent automatically to the customer when they ask to reset their accounts password.
+## Fulfillment service notifications
 
-- [Customer payment method update request](templates/customer-payment-method-update-request.liquid)
-Sent to the customer when they ask to update their stored payment method.
+These are sent to third-party fulfillment providers, not customers.
 
-- [Contact customer](templates/contact_customer.liquid)
-Sent to the customer when you contact them from the orders or customers page. You can edit this email before you send it.
+- [Fulfillment request](templates/fulfillment-request.liquid) — Sent to a fulfillment service when order items are assigned for fulfillment.
 
-- [Confirmation email](templates/confirmation-email.liquid)
-Sent to the customer automatically when they sign up for email marketing (if email double opt-in is enabled).
+## Other notification categories (out of scope)
 
-- [Return instructions](templates/return-instructions.liquid)
-Sent automatically to the customer when you create a return. Includes instructions as well as a return label, if applicable.
+These are managed separately in Shopify admin and are not part of this repo:
 
-- [Return label instructions](templates/return-label-instructions.liquid)
-Sent to the customer after creating a return label.
+- **Staff notifications** — e.g. New order, Store order summary
+- **SMS notifications** — Order confirmation text messages
+- **Subscription notifications** — Available when the [Shopify Subscriptions](https://help.shopify.com/en/manual/products/purchase-options/subscriptions) app is installed
+- **Webhooks** — For custom integrations
+
+## References
+
+- [Store notifications](https://help.shopify.com/en/manual/orders/notifications)
+- [Customizing email notification templates](https://help.shopify.com/en/manual/orders/notifications/edit-template)
+- [Notifications variables reference](https://help.shopify.com/en/manual/orders/notifications/email-variables)
+- [Updating email notifications for exchanges](https://help.shopify.com/en/manual/fulfillment/setup/notifications/exchange-notifications)
