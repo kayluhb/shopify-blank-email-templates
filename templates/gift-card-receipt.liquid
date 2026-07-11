@@ -1,0 +1,71 @@
+{% if gift_card.recipient %}
+  {% if gift_card.recipient.nickname != blank %}
+    {% assign recipient_name = gift_card.recipient.nickname %}
+  {% elsif gift_card.recipient.name != blank %}
+    {% assign recipient_name = gift_card.recipient.name %}
+  {% else %}
+    {% assign recipient_name = gift_card.recipient.email %}
+  {% endif %}
+  {% capture email_title %}
+    {% if gift_card.send_on != blank %}
+      Here's the gift card that will be sent to {{ recipient_name }} on {{ gift_card.send_on | date: '%B %e, %Y' }}.
+    {% else %}
+      Here's the gift card that was sent to {{ recipient_name }}.
+    {% endif %}
+  {% endcapture %}
+{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ email_title }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+      .button { background: {{ shop.email_accent_color }}; }
+      a, a:hover, a:active, a:visited { color: {{ shop.email_accent_color }}; }
+    </style>
+  </head>
+  <body>
+    {%- if shop.email_logo_url %}
+      <img src="{{ shop.email_logo_url }}" alt="{{ shop.name }}" width="{{ shop.email_logo_width }}">
+    {%- else %}
+      <h1>
+        <a href="{{ shop.url }}">{{ shop.name }}</a>
+      </h1>
+    {%- endif %}
+
+    <h2>{{ email_title }}</h2>
+
+    {% if gift_card.recipient and gift_card.message != blank %}
+      <p>"{{ gift_card.message }}"</p>
+    {% endif %}
+
+    <p>{{ gift_card.initial_value | money_with_currency }}</p>
+
+    {% if gift_card.expires_on %}
+      <p>Expires {{ gift_card.expires_on | date: '%B %e, %Y' }}</p>
+    {% endif %}
+
+    <img src="{{ 'gift-card/card.jpg' | shopify_asset_url }}" alt="Gift card image" width="240" height="160">
+
+    <p>{{ shop.name }}</p>
+    <p>Use the gift card code online</p>
+    <p>{{ gift_card.code | format_code }}</p>
+
+    {% if shop.url %}
+      <a href="{{ shop.url }}">Visit our store</a>
+      <br />
+    {% endif %}
+
+    <a href="{{ gift_card.url }}">View gift card balance</a>
+    <br />
+
+    {% if gift_card.pass_url %}
+      <a href="{{ gift_card.pass_url }}">
+        <img src="{{ 'gift-card/add-to-apple-wallet.png' | shopify_asset_url }}" alt="Add to Apple Wallet" width="120" height="40">
+      </a>
+    {% endif %}
+
+    <p>If you have any questions, reply to this email or contact us at <a href="mailto:{{ shop.email }}">{{ shop.email }}</a></p>
+  </body>
+</html>

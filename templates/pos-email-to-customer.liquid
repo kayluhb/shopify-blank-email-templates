@@ -1,10 +1,10 @@
+{% capture email_title %}Complete your purchase{% endcapture %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <title>{{ email_title }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" type="text/css" href="/assets/notifications/styles.css">
     <style>
       .button { background: {{ shop.email_accent_color }}; }
       a, a:hover, a:active, a:visited { color: {{ shop.email_accent_color }}; }
@@ -19,20 +19,22 @@
       </h1>
     {%- endif %}
 
-    <h2>Order {{ order_name }}</h2>
-    <h2>Additional payment of {{ order.total_outstanding | money }} is needed to update your order</h2>
+    <p>{{ draft_order.name }}</p>
+
+    <h2>{{ email_title }}</h2>
+    <a href="{{ checkout_url }}">Continue to payment</a>
+
+    {% if shop.url %}
+      or <a href="{{ shop.url }}">Visit our store</a>
+    {% endif %}
 
     {% if custom_message != blank %}
       <p>{{ custom_message }}</p>
     {% endif %}
 
-    {% if checkout_payment_collection_url %}
-      <a href="{{ checkout_payment_collection_url }}">Pay now</a>
-    {% endif %}
+    <h3>Order summary</h3>
 
-    <h3>Updated order</h3>
     {% for line in subtotal_line_items %}
-
       {% if line.image %}
         <img src="{{ line | img_url: 'compact_cropped' }}" align="left" width="60" height="60" />
       {% endif %}
@@ -43,24 +45,12 @@
         {% assign line_title = line.title %}
       {% endif %}
 
-      {% if line.quantity < line.quantity %}
-        {% capture line_display %}
-          {{ line.quantity }} of {{ line.quantity }}
-        {% endcapture %}
-      {% else %}
-        {% capture line_display %}
-          {{ line.quantity }}
-        {% endcapture %}
-      {% endif %}
+      {% assign line_display = line.quantity %}
 
       {{ line_title }} × {{ line_display }}
 
-      {% if line.variant.title != 'Default Title' %}
+      {% if line.variant.title != blank and line.variant.title != 'Default Title' %}
         {{ line.variant.title }}
-      {% endif %}
-
-      {% if line.selling_plan_allocation %}
-        {{ line.selling_plan_allocation.selling_plan.name }}
       {% endif %}
 
       {% if line.discount_allocations %}
@@ -86,61 +76,51 @@
       </p>
     {% endfor %}
 
+    {% assign order_discount_count = 0 %}
+    {% assign total_order_discount_amount = 0 %}
     {% for discount_application in discount_applications %}
-      {% if discount_application.target_selection == 'all' %}
-        {% capture discount_title %}
-          {% if discount_application.title %}
-            {{ discount_application.title | upcase }}
-          {% else %}
-            Discount
-          {% endif %}
-        {% endcapture %}
-
-        <p>
-          Discount
-          <img src="{{ 'notifications/discounttag.png' | shopify_asset_url }}" width="18" height="18" />
-          {{ discount_title }}
-        </p>
-        <strong>-{{ discount_application.total_allocated_amount | money }}</strong>
+      {% if discount_application.target_selection == 'all' and discount_application.target_type == 'line_item' %}
+        {% assign order_discount_count = order_discount_count | plus: 1 %}
+        {% assign total_order_discount_amount = total_order_discount_amount | plus: discount_application.total_allocated_amount %}
       {% endif %}
     {% endfor %}
 
-    <p>
-      Subtotal
-    </p>
-    <strong>{{ subtotal_price | money }}</strong>
+    {% if order_discount_count > 0 %}
+      <p>Discounts</p>
+      <strong>-{{ total_order_discount_amount | money }}</strong>
 
-    <p>
-      Shipping
-    </p>
-    <strong>{{ shipping_price | money }}</strong>
-
-    <p>
-      Taxes
-    </p>
-    <strong>{{ tax_price | money }}</strong>
-
-    {% if total_tip_received and total_tip_received > 0 %}
-      <p>
-        Tip
-      </p>
-      <strong>{{ total_tip_received | money }}</strong>
+      {% for discount_application in discount_applications %}
+        {% if discount_application.target_selection == 'all' and discount_application.target_type != 'shipping_line' %}
+          <p>
+            <img src="{{ 'notifications/discounttag.png' | shopify_asset_url }}" width="18" height="18" />
+            {{ discount_application.title | upcase }} (-{{ discount_application.total_allocated_amount | money }})
+          </p>
+        {% endif %}
+      {% endfor %}
     {% endif %}
 
-    <p>
-      Updated total
-    </p>
-    <strong>{{ total_price | money }}</strong>
+    <p>Subtotal</p>
+    <strong>{{ subtotal_price | money }}</strong>
 
-    <p>
-      Already paid
-    </p>
-    <strong>{{ net_payment | money }}</strong>
+    <p>Estimated taxes</p>
+    <strong>{{ tax_price | money }}</strong>
 
-    <p>
-      Amount to pay
-    </p>
-    <strong>{{ total_outstanding | money_with_currency }}</strong>
+    <p>Total</p>
+    <strong>{{ total_outstanding | money }}</strong>
+
+    {% if shipping_address or billing_address %}
+      <h3>Customer information</h3>
+
+      {% if shipping_address %}
+        <h4>Shipping address</h4>
+        {{ shipping_address | format_address }}
+      {% endif %}
+
+      {% if billing_address %}
+        <h4>Billing address</h4>
+        {{ billing_address | format_address }}
+      {% endif %}
+    {% endif %}
 
     <p>If you have any questions, reply to this email or contact us at <a href="mailto:{{ shop.email }}">{{ shop.email }}</a></p>
   </body>

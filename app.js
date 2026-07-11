@@ -32,6 +32,12 @@ app
   .get('/abandoned-checkout', function (req, res) {
     res.render('abandoned-checkout', { shop });
   })
+  .get('/b2b-access-email', function (req, res) {
+    res.render('b2b-access-email', { shop });
+  })
+  .get('/b2b-location-update-payment-method', function (req, res) {
+    res.render('b2b-location-update-payment-method', { shop });
+  })
   .get('/confirmation-email', function (req, res) {
     res.render('confirmation-email', { customer, shop });
   })
@@ -65,20 +71,35 @@ app
   .get('/gift-card-created', function (req, res) {
     res.render('gift-card-created', { shop });
   })
+  .get('/gift-card-receipt', function (req, res) {
+    res.render('gift-card-receipt', { shop });
+  })
   .get('/order-canceled', function (req, res) {
     res.render('order-canceled', { shop });
   })
   .get('/order-confirmation', function (req, res) {
     res.render('order-confirmation', { customer, shop });
   })
-  .get('/order-edited-invoice', function (req, res) {
-    res.render('order-edited-invoice', { shop });
-  })
   .get('/order-edited', function (req, res) {
     res.render('order-edited', { shop });
   })
   .get('/order-invoice', function (req, res) {
     res.render('order-invoice', { shop });
+  })
+  .get('/order-level-return-label-created', function (req, res) {
+    res.render('order-level-return-label-created', { shop });
+  })
+  .get('/order-locally-delivered', function (req, res) {
+    res.render('order-locally-delivered', { shop });
+  })
+  .get('/order-missed-local-delivery', function (req, res) {
+    res.render('order-missed-local-delivery', { customer, shop });
+  })
+  .get('/order-out-for-local-delivery', function (req, res) {
+    res.render('order-out-for-local-delivery', { shop });
+  })
+  .get('/order-payment-receipt', function (req, res) {
+    res.render('order-payment-receipt', { shop });
   })
   .get('/order-refund', function (req, res) {
     res.render('order-refund', { shop });
@@ -89,23 +110,47 @@ app
   .get('/payment-error', function (req, res) {
     res.render('payment-error', { shop });
   })
+  .get('/payment-method-restore-request', function (req, res) {
+    res.render('payment-method-restore-request', { shop });
+  })
+  .get('/payment-reminder', function (req, res) {
+    res.render('payment-reminder', { shop });
+  })
+  .get('/pending-payment-error', function (req, res) {
+    res.render('pending-payment-error', { shop });
+  })
+  .get('/pending-payment-success', function (req, res) {
+    res.render('pending-payment-success', { shop });
+  })
   .get('/picked-up', function (req, res) {
     res.render('picked-up', { shop });
   })
   .get('/pos-and-mobile-receipt', function (req, res) {
     res.render('pos-and-mobile-receipt', { shop });
   })
+  .get('/pos-email-to-customer', function (req, res) {
+    res.render('pos-email-to-customer', { shop });
+  })
   .get('/pos-exchange-receipt', function (req, res) {
     res.render('pos-exchange-receipt', { shop });
+  })
+  .get('/pos-exchange-v2-receipt', function (req, res) {
+    res.render('pos-exchange-v2-receipt', { shop });
   })
   .get('/ready-for-pickup', function (req, res) {
     res.render('ready-for-pickup', { shop });
   })
-  .get('/return-instructions', function (req, res) {
-    res.render('return-instructions', { shop });
+  .get('/return-created', function (req, res) {
+    res.render('return-created', { shop });
   })
-  .get('/return-label-instructions', function (req, res) {
-    res.render('return-label-instructions', { shop });
+  .get('/return-request-approved', function (req, res) {
+    res.render('return-request-approved', { shop });
+  })
+  .get('/return-request-declined', function (req, res) {
+    res.render('return-request-declined', { shop });
+  })
+  .get('/return-request-received', function (req, res) {
+    res.render('return-request-received', { shop });
   })
   .get('/shipping-confirmation', function (req, res) {
     res.render('shipping-confirmation', { shop });
