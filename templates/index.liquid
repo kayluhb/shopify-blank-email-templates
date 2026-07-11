@@ -1,51 +1,155 @@
-<html>
-  <head>
-  </head>
-  <body>
-  <ul>
-    <li><a href="/abandoned-checkout">abandoned-checkout</a></li>
-    <li><a href="/b2b-access-email">b2b-access-email</a></li>
-    <li><a href="/b2b-location-update-payment-method">b2b-location-update-payment-method</a></li>
-    <li><a href="/confirmation-email">confirmation-email</a></li>
-    <li><a href="/contact-customer">contact-customer</a></li>
-    <li><a href="/customer-account-invite">customer-account-invite</a></li>
-    <li><a href="/customer-account-password-reset">customer-account-password-reset</a></li>
-    <li><a href="/customer-account-welcome">customer-account-welcome</a></li>
-    <li><a href="/customer-payment-method-update-request">customer-payment-method-update-request</a></li>
-    <li><a href="/delivered">delivered</a></li>
-    <li><a href="/draft-order-invoice">draft-order-invoice</a></li>
-    <li><a href="/email-cart-from-pos">email-cart-from-pos</a></li>
-    <li><a href="/fulfillment-request">fulfillment-request</a></li>
-    <li><a href="/gift-card-created">gift-card-created</a></li>
-    <li><a href="/gift-card-receipt">gift-card-receipt</a></li>
-    <li><a href="/order-canceled">order-canceled</a></li>
-    <li><a href="/order-confirmation">order-confirmation</a></li>
-    <li><a href="/order-edited">order-edited</a></li>
-    <li><a href="/order-invoice">order-invoice</a></li>
-    <li><a href="/order-level-return-label-created">order-level-return-label-created</a></li>
-    <li><a href="/order-locally-delivered">order-locally-delivered</a></li>
-    <li><a href="/order-missed-local-delivery">order-missed-local-delivery</a></li>
-    <li><a href="/order-out-for-local-delivery">order-out-for-local-delivery</a></li>
-    <li><a href="/order-payment-receipt">order-payment-receipt</a></li>
-    <li><a href="/order-refund">order-refund</a></li>
-    <li><a href="/out-for-delivery">out-for-delivery</a></li>
-    <li><a href="/payment-error">payment-error</a></li>
-    <li><a href="/payment-method-restore-request">payment-method-restore-request</a></li>
-    <li><a href="/payment-reminder">payment-reminder</a></li>
-    <li><a href="/pending-payment-error">pending-payment-error</a></li>
-    <li><a href="/pending-payment-success">pending-payment-success</a></li>
-    <li><a href="/picked-up">picked-up</a></li>
-    <li><a href="/pos-and-mobile-receipt">pos-and-mobile-receipt</a></li>
-    <li><a href="/pos-email-to-customer">pos-email-to-customer</a></li>
-    <li><a href="/pos-exchange-receipt">pos-exchange-receipt</a></li>
-    <li><a href="/pos-exchange-v2-receipt">pos-exchange-v2-receipt</a></li>
-    <li><a href="/ready-for-pickup">ready-for-pickup</a></li>
-    <li><a href="/return-created">return-created</a></li>
-    <li><a href="/return-request-approved">return-request-approved</a></li>
-    <li><a href="/return-request-declined">return-request-declined</a></li>
-    <li><a href="/return-request-received">return-request-received</a></li>
-    <li><a href="/shipping-confirmation">shipping-confirmation</a></li>
-    <li><a href="/shipping-update">shipping-update</a></li>
-  </ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Shopify Blank Email Templates</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #f6f6f7;
+      color: #303030;
+      margin: 0;
+      padding: 40px 24px;
+    }
+    .wrap { max-width: 840px; margin: 0 auto; }
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      color: #202223;
+      margin: 0 0 8px;
+    }
+    .tagline {
+      color: #008060;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin: 0 0 24px;
+    }
+    .intro {
+      line-height: 1.6;
+      margin-bottom: 32px;
+      color: #616161;
+      font-size: 15px;
+    }
+    h2 {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #6d7175;
+      margin: 32px 0 12px;
+      border-bottom: 1px solid #e1e3e5;
+      padding-bottom: 8px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 8px;
+    }
+    a {
+      display: block;
+      padding: 10px 14px;
+      background: #fff;
+      border: 1px solid #e1e3e5;
+      border-radius: 4px;
+      color: #202223;
+      text-decoration: none;
+      font-size: 14px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    a:hover {
+      border-color: #008060;
+      color: #008060;
+    }
+    .count {
+      font-size: 13px;
+      color: #8c9196;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="tagline">Local preview</p>
+    <h1>Shopify Blank Email Templates</h1>
+    <p class="intro">Scrubbed starting points for Shopify notification emails. Copy into Shopify Admin → Settings → Notifications.</p>
+    <p class="count">43 templates</p>
+
+    <h2>Orders</h2>
+    <ul>
+      <li><a href="/order-confirmation">Order confirmation</a></li>
+      <li><a href="/order-edited">Order edited</a></li>
+      <li><a href="/order-invoice">Order invoice</a></li>
+      <li><a href="/order-canceled">Order canceled</a></li>
+      <li><a href="/order-refund">Order refund</a></li>
+      <li><a href="/order-payment-receipt">Order payment receipt</a></li>
+      <li><a href="/draft-order-invoice">Draft order invoice</a></li>
+      <li><a href="/abandoned-checkout">Abandoned checkout</a></li>
+      <li><a href="/payment-error">Payment error</a></li>
+      <li><a href="/pending-payment-success">Pending payment success</a></li>
+      <li><a href="/pending-payment-error">Pending payment error</a></li>
+      <li><a href="/payment-reminder">Payment reminder</a></li>
+      <li><a href="/gift-card-created">Gift card created</a></li>
+      <li><a href="/gift-card-receipt">Gift card receipt</a></li>
+    </ul>
+
+    <h2>Shipping &amp; delivery</h2>
+    <ul>
+      <li><a href="/shipping-confirmation">Shipping confirmation</a></li>
+      <li><a href="/shipping-update">Shipping update</a></li>
+      <li><a href="/out-for-delivery">Out for delivery</a></li>
+      <li><a href="/delivered">Delivered</a></li>
+      <li><a href="/ready-for-pickup">Ready for pickup</a></li>
+      <li><a href="/picked-up">Picked up</a></li>
+      <li><a href="/order-out-for-local-delivery">Order out for local delivery</a></li>
+      <li><a href="/order-locally-delivered">Order locally delivered</a></li>
+      <li><a href="/order-missed-local-delivery">Order missed local delivery</a></li>
+    </ul>
+
+    <h2>Returns</h2>
+    <ul>
+      <li><a href="/return-created">Return created</a></li>
+      <li><a href="/order-level-return-label-created">Order-level return label created</a></li>
+      <li><a href="/return-request-received">Return request received</a></li>
+      <li><a href="/return-request-approved">Return request approved</a></li>
+      <li><a href="/return-request-declined">Return request declined</a></li>
+    </ul>
+
+    <h2>POS</h2>
+    <ul>
+      <li><a href="/email-cart-from-pos">POS abandoned checkout</a></li>
+      <li><a href="/pos-email-to-customer">POS email to customer</a></li>
+      <li><a href="/pos-and-mobile-receipt">POS &amp; mobile receipt</a></li>
+      <li><a href="/pos-exchange-receipt">POS exchange receipt</a></li>
+      <li><a href="/pos-exchange-v2-receipt">POS exchange V2 receipt</a></li>
+    </ul>
+
+    <h2>Customer account &amp; marketing</h2>
+    <ul>
+      <li><a href="/customer-account-invite">Customer account invite</a></li>
+      <li><a href="/customer-account-welcome">Customer account welcome</a></li>
+      <li><a href="/customer-account-password-reset">Password reset</a></li>
+      <li><a href="/customer-payment-method-update-request">Payment method update</a></li>
+      <li><a href="/payment-method-restore-request">Payment method restore</a></li>
+      <li><a href="/contact-customer">Contact customer</a></li>
+      <li><a href="/confirmation-email">Email marketing confirmation</a></li>
+    </ul>
+
+    <h2>B2B</h2>
+    <ul>
+      <li><a href="/b2b-access-email">B2B access email</a></li>
+      <li><a href="/b2b-location-update-payment-method">B2B location update payment method</a></li>
+    </ul>
+
+    <h2>Fulfillment service</h2>
+    <ul>
+      <li><a href="/fulfillment-request">Fulfillment request</a></li>
+    </ul>
+  </div>
 </body>
 </html>

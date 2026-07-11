@@ -13,7 +13,7 @@ yarn install
 node index.js
 ```
 
-Open [http://localhost:5000](http://localhost:5000) for links to each template.
+Open [http://localhost:5050](http://localhost:5050) for links to each template.
 
 ## Audit summary
 
